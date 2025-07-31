@@ -1,0 +1,7 @@
+# -------------------------------------------------
+# robots.txt para cam4.xxx (sitio Next.js)
+# -------------------------------------------------
+User-agent: *
+Disallow:
+
+Sitemap: https://cam4.xxx/sitemap.xml
