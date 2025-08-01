@@ -12,10 +12,9 @@ import { cn, getCountryName } from "@/lib/utils"
 interface CamCardProps {
   cam: Cam
   priority?: boolean
-  loading?: "eager" | "lazy"
 }
 
-export function CamCard({ cam, priority = false, loading = "lazy" }: CamCardProps) {
+export function CamCard({ cam, priority = false }: CamCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
   
@@ -37,7 +36,7 @@ export function CamCard({ cam, priority = false, loading = "lazy" }: CamCardProp
               className="object-cover"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
               priority={priority}
-              loading={loading}
+              loading="eager"
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               placeholder="blur"

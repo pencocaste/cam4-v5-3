@@ -268,7 +268,6 @@ export function ClientCamGrid({ initialCams, defaultGender, defaultCountry }: Cl
               <CamCard 
                 key={cam.id} 
                 cam={cam}
-                loading="lazy"
               />
             ))}
           </div>

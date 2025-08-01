@@ -68,7 +68,6 @@ export async function ServerCamGrid({ defaultGender, defaultCountry }: ServerCam
             key={cam.id} 
             cam={cam} 
             priority={index < 6} // Priority loading for first 6 images
-            loading={index < 12 ? "eager" : "lazy"} // Eager loading for first 12
           />
         ))}
       </div>
