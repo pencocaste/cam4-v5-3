@@ -5,6 +5,7 @@ import { ClientCamGrid } from "@/components/client-cam-grid";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { SchemaMarkup } from "@/components/schema-markup";
+import { ImagePreloader } from "@/components/image-preloader";
 
 interface ServerCamGridProps {
   defaultGender?: string;
@@ -52,6 +53,14 @@ export async function ServerCamGrid({ defaultGender, defaultCountry }: ServerCam
   
   return (
     <div className="px-0">
+      {/* Preload critical images */}
+      <ImagePreloader 
+        images={initialCams.slice(0, 12).map(cam => 
+          cam.thumb_big || cam.thumb || cam.thumb_error
+        ).filter(Boolean)} 
+        priority={true}
+      />
+      
       {/* Schema markup for the cam list */}
       <SchemaMarkup 
         type="itemList" 
