@@ -35,6 +35,7 @@ export function CamCard({ cam, priority = false, loading = "lazy" }: CamCardProp
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [retryCount, setRetryCount] = useState(0)
   const [loadStartTime, setLoadStartTime] = useState<number | null>(null)
   
   // Only load image when it's about to enter viewport or if it's priority
@@ -74,15 +75,16 @@ export function CamCard({ cam, priority = false, loading = "lazy" }: CamCardProp
     
     // Track error in performance monitor
     if (loadStartTime) {
-      performanceMonitor.trackImageError(imageUrl, loadStartTime, currentImageIndex > 0);
+      performanceMonitor.trackImageError(imageUrl, loadStartTime, retryCount > 0);
     }
     
     // Try next image in the fallback chain
     const originalUrls = [cam.thumb_big, cam.thumb, cam.thumb_error].filter(Boolean);
     const maxAttempts = originalUrls.length + FALLBACK_IMAGES.length;
     
-    if (currentImageIndex < maxAttempts - 1) {
+    if (currentImageIndex < maxAttempts - 1 && retryCount < 3) {
       setCurrentImageIndex(prev => prev + 1);
+      setRetryCount(prev => prev + 1);
       setImageError(false); // Reset error state for retry
     } else {
       setImageError(true);
@@ -96,10 +98,11 @@ export function CamCard({ cam, priority = false, loading = "lazy" }: CamCardProp
     
     // Track successful load in performance monitor
     if (loadStartTime) {
-      performanceMonitor.trackImageLoad(imageUrl, loadStartTime, currentImageIndex > 0);
+      performanceMonitor.trackImageLoad(imageUrl, loadStartTime, retryCount > 0);
     }
     
-    // Image loaded successfully - no need to reset currentImageIndex as it's managed per component
+    // Reset retry logic on successful load
+    setRetryCount(0);
   };
   
   const handleImageLoadStart = () => {
