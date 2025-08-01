@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { CamCard } from "@/components/cam-card"
+import { ImagePrefetcher } from "@/components/image-prefetcher"
+import { useImagePrefetch } from '@/hooks/use-image-preloader'
 
 interface ClientCamGridProps {
   initialCams: Cam[];
@@ -49,6 +51,10 @@ export function ClientCamGrid({ initialCams, defaultGender, defaultCountry }: Cl
   
   const searchParams = useSearchParams()
   const { toast } = useToast()
+  
+  // Prefetch images for the next batch when user is close to the end
+  const nextBatchImages = cams.slice(cams.length - 12).map(cam => cam.thumb_big || cam.thumb).filter(Boolean);
+  useImagePrefetch(nextBatchImages, hasMore && !isLoading);
   
   const getFilterParams = useCallback(() => {
     const params: Record<string, string> = {}
@@ -268,9 +274,18 @@ export function ClientCamGrid({ initialCams, defaultGender, defaultCountry }: Cl
               <CamCard 
                 key={cam.id} 
                 cam={cam}
+                preload={true}
               />
             ))}
           </div>
+          
+          {/* Prefetch images for potential next load */}
+          {hasMore && (
+            <ImagePrefetcher
+              images={additionalCams.slice(-6).map(cam => cam.thumb_big || cam.thumb)}
+              enabled={!isLoading}
+            />
+          )}
         </InfiniteScroll>
       </div>
     )

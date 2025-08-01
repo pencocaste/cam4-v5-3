@@ -5,6 +5,7 @@ import { ClientCamGrid } from "@/components/client-cam-grid";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { SchemaMarkup } from "@/components/schema-markup";
+import { ImagePrefetcher } from "@/components/image-prefetcher";
 
 interface ServerCamGridProps {
   defaultGender?: string;
@@ -67,10 +68,17 @@ export async function ServerCamGrid({ defaultGender, defaultCountry }: ServerCam
           <CamCard 
             key={cam.id} 
             cam={cam} 
-            priority={index < 6} // Priority loading for first 6 images
+            priority={index < 6}
+            preload={index < 12} // Preload first 12 images
           />
         ))}
       </div>
+      
+      {/* Prefetch remaining images */}
+      <ImagePrefetcher
+        images={initialCams.slice(24).map(cam => cam.thumb_big || cam.thumb)}
+        enabled={initialCams.length > 24}
+      />
       
       {/* Componente cliente para manejo de estado y carga infinita */}
       <ClientCamGrid 

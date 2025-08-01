@@ -1,20 +1,21 @@
 'use client'
 
 import Link from "next/link"
-import Image from "next/image"
 import { useState } from "react"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Badge } from "@/components/ui/badge"
 import { EyeIcon, MapPinIcon } from "lucide-react"
 import { type Cam } from "@/lib/types"
 import { cn, getCountryName } from "@/lib/utils"
+import { OptimizedImage } from "@/components/optimized-image"
 
 interface CamCardProps {
   cam: Cam
   priority?: boolean
+  preload?: boolean
 }
 
-export function CamCard({ cam, priority = false }: CamCardProps) {
+export function CamCard({ cam, priority = false, preload = false }: CamCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
   
@@ -29,16 +30,17 @@ export function CamCard({ cam, priority = false }: CamCardProps) {
       <div className="cam-card h-full border-0 block">
         <div className="relative bg-muted overflow-hidden">
           <AspectRatio ratio={4/3}>
-            <Image
+            <OptimizedImage
               src={imageUrl}
+              fallbackSrc={cam.thumb_error}
               alt={`${cam.nickname} - live cam model from ${getCountryName(cam.country)}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
               priority={priority}
-              loading="eager"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
+              preload={preload}
+              onImageLoad={() => setImageLoaded(true)}
+              onImageError={() => setImageError(true)}
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyEkJyTjvzRQVhuwT2O/wArGtUIBUh6T6Hb5l8/cRBTKIWvjFaU4xZB0Pl9o8uo8mN4JKtZRRW0ixF7F6Bfc/P9f/Z"
             />

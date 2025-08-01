@@ -2,6 +2,11 @@
 const nextConfig = {
   trailingSlash: true,
   images: {
+    // Optimize image caching
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    dangerouslyAllowSVG: false,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Image domains
     remotePatterns: [
       {
         protocol: 'https',
