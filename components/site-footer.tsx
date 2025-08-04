@@ -22,7 +22,7 @@ export default function SiteFooter() {
             <h3 className="text-sm font-semibold">Earn Money $</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help/" className="text-muted-foreground hover:text-foreground transition-colors" rel="nofollow noopener noreferrer">
+                <Link href="https://offers.cam4tracking.com/aff_c?offer_id=2292&aff_id=7654" className="text-muted-foreground hover:text-foreground transition-colors" rel="nofollow noopener noreferrer">
                   Become a Cam Model
                 </Link>
               </li>
