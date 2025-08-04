@@ -27,7 +27,7 @@ export default function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact/" className="text-muted-foreground hover:text-foreground transition-colors" rel="nofollow noopener noreferrer">
+                <Link href="https://affiliates.cam4.com/signup/7654" className="text-muted-foreground hover:text-foreground transition-colors" rel="nofollow noopener noreferrer">
                   Affiliate Program
                 </Link>
               </li>
